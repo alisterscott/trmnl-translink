@@ -24,5 +24,5 @@ custom_fields:
   min: 0
   max: 60
   help_text: Min 0, Max 60 mins
-name: Translink
+name: Queensland Stop Timetable (Translink)
 refresh_interval: 15
