@@ -13,8 +13,9 @@ custom_fields:
   field_type: string
   name: Stop ID
   description: Translink Stop ID
-  placeholder: '003749'
+  placeholder: central-station
   help_text: eg. 003749 or central-station
+  default: central-station
 - keyname: hidenextmins
   field_type: number
   placeholder: 15
