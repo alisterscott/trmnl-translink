@@ -79,7 +79,7 @@
 {% endif %}
 
 <div class="title_bar">
-  <svg version="1.1" viewBox="0 0 42.66 42.603" width="28" height="28" xmlns="http://www.w3.org/2000/svg"
+  <svg class="image" version="1.1" viewBox="0 0 42.66 42.603" width="28" height="28" xmlns="http://www.w3.org/2000/svg"
     xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
     <metadata>
@@ -109,8 +109,8 @@
       </g>
     </g>
   </svg>
-  <span class="title">{{ name }}</span>
-  <span class="instance">
+  <span class="title title--small">{{ name | truncate: 20 }}</span>
+  <span class="instance" data-clamp="1">
     <svg width="15" height="15" fill="#000000" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
