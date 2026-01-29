@@ -1,0 +1,124 @@
+{% assign now_epoch = "now" | date: "%s" | plus: 0 %}
+{% assign hide_mins = trmnl.plugin_settings.custom_fields_values.hidenextmins | default: "15" | plus: 0 %}
+{% assign hide_secs = hide_mins | times: 60 %}
+{% assign cutoff_epoch = now_epoch | plus: hide_secs %}
+<div class="layout flex flex--top">
+  <table class="table" data-table-limit="true">
+    <thead>
+      <tr>
+        <th><span class="title title--small">Service</span></th>
+        <th><span class="title title--small">Departs*</span></th>
+        <th><span class="title title--small">Route</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if departures and departures.size > 0 %}
+      {% for d in departures %}
+      {% if d.realtime != nil and d.realtime.expectedDepartureUtc %}
+      {% assign dep_epoch = d.realtime.expectedDepartureUtc | date: "%s" | plus: 0 %}
+      {% else %}
+      {% assign dep_epoch = d.scheduledDepartureUtc | date: "%s" | plus: 0 %}
+      {% endif %}
+      {% if dep_epoch >= cutoff_epoch %}
+      {% unless d.realtime.isCancelled %}
+      <tr>
+        <td>
+          <span class="label">{{ d.headsign }}</span>
+        </td>
+
+        <td style="white-space: nowrap; width: 120px;">
+          {% if d.realtime != nil and d.realtime.expectedDepartureUtc %}
+
+          <span class="label">
+            {{ d.realtime.expectedDepartureUtc | date: "%s" | plus: trmnl.user.utc_offset | date: "%I:%M %P" }}
+            <svg width="15" height="15" style="vertical-align: -2px; opacity: 0.6;" fill="#000000" viewBox="0 0 56 56"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M 33.2500 51.0273 C 34.0938 51.6133 35.2656 51.3789 35.9219 50.4180 C 40.2344 44.2773 42.7187 36.3789 42.7187 28.0117 C 42.7187 19.6445 40.2109 11.7227 35.9219 5.5820 C 35.2656 4.6211 34.1172 4.3867 33.2500 4.9961 C 32.3360 5.6055 32.2187 6.7773 32.8984 7.7617 C 36.6484 13.3164 38.9922 20.4414 38.9922 28.0117 C 38.9922 35.5820 36.7422 42.8008 32.875 48.2617 C 32.1953 49.2227 32.3360 50.3945 33.2500 51.0273 Z M 23.7813 44.6289 C 24.6953 45.2383 25.8203 45.0039 26.4766 44.0664 C 29.5938 39.7539 31.3750 34.0117 31.3750 28.0117 C 31.3750 21.9883 29.6172 16.2461 26.4766 11.9336 C 25.7969 11.0195 24.6953 10.7851 23.7813 11.3945 C 22.8906 12.0039 22.7500 13.1524 23.4531 14.1602 C 26.0078 17.9102 27.6016 22.8320 27.6016 28.0117 C 27.6016 33.1914 26.0547 38.1602 23.4531 41.8633 C 22.7734 42.8711 22.8906 44.0195 23.7813 44.6289 Z M 14.4297 38.3008 C 15.2500 38.8633 16.375 38.6758 17.0547 37.7617 C 18.8828 35.3008 19.9844 31.6914 19.9844 28.0117 C 19.9844 24.3320 18.8594 20.7461 17.0547 18.2383 C 16.375 17.3242 15.2500 17.1367 14.4297 17.6992 C 13.4219 18.3789 13.2813 19.5742 14.0313 20.6055 C 15.3906 22.4336 16.2109 25.2227 16.2109 28.0117 C 16.2109 30.8008 15.3672 33.5898 14.0313 35.4414 C 13.3047 36.4492 13.4453 37.5976 14.4297 38.3008 Z">
+                </path>
+              </g>
+            </svg>
+          </span>
+          {% else %}
+          <span class="label">
+            {{ d.scheduledDepartureUtc | date: "%s" | plus: trmnl.user.utc_offset | date: "%I:%M %P" }}
+          </span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% assign route =
+          routes | where: "id", d.routeId | first %}
+          <span class="label label--small">
+            {{ route.name }}
+          </span>
+        </td>
+      </tr>
+      {% endunless %}
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      <tr>
+        <td colspan="3">
+          <span class="label label--small">
+            No upcoming services
+          </span>
+        </td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% if hide_mins > 0 %}
+<span class="label label--small">
+  *Services departing within the next {{ hide_mins }} minutes are not shown.
+</span>
+{% endif %}
+
+<div class="title_bar">
+  <svg version="1.1" viewBox="0 0 42.66 42.603" width="28" height="28" xmlns="http://www.w3.org/2000/svg"
+    xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <metadata>
+      <rdf:RDF>
+        <cc:Work rdf:about="">
+          <dc:format>image/svg+xml</dc:format>
+          <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+          <dc:title />
+        </cc:Work>
+      </rdf:RDF>
+    </metadata>
+    <defs>
+      <path id="a"
+        d="m42.598 20.557a21.18 21.18 0 0 1-2.915 11.523c-3.893 6.638-10.897 10.546-18.523 10.523-4.368-0.014-7.883-3.597-7.853-7.964a7.906 7.906 0 0 1 7.418-7.834c0.38-0.033 1.534-0.105 3.087 0.07 3.381 0.38 8.547 1.15 10.995 0.473 5.355-1.48 7.053-4.445 7.497-6.816 0.031-0.173 0.29-0.152 0.295 0.025zm-28.836-12.855a7.907 7.907 0 0 1 3.076 10.341c-0.16 0.345-0.677 1.381-1.605 2.639-2.02 2.737-5.269 6.826-5.907 9.284-1.397 5.379 0.323 8.33 2.154 9.9 0.135 0.115-0.013 0.327-0.169 0.243a21.189 21.189 0 0 1-8.522-8.286c-3.8-6.69-3.685-14.71 0.15-21.303 2.196-3.776 7.056-5.028 10.823-2.818zm7.697-7.702c7.694 0.055 14.58 4.163 18.374 10.781 2.172 3.79 0.827 8.626-2.97 10.782a7.906 7.906 0 0 1-10.494-2.506c-0.218-0.312-0.858-1.277-1.484-2.709-1.36-3.117-3.276-7.977-5.086-9.759-3.96-3.897-7.376-3.885-9.651-3.083-0.166 0.059-0.278-0.176-0.128-0.27a21.19 21.19 0 0 1 11.44-3.234z" />
+    </defs>
+    <g transform="translate(-.15301 -.314)" fill="none" fill-rule="evenodd">
+      <path
+        d="m42.751 20.871a21.18 21.18 0 0 1-2.914 11.524c-3.895 6.637-10.897 10.545-18.525 10.522-4.368-0.014-7.882-3.596-7.853-7.964a7.906 7.906 0 0 1 7.418-7.834c0.38-0.033 1.535-0.104 3.087 0.07 3.382 0.38 8.547 1.15 10.995 0.473 5.356-1.48 7.054-4.445 7.497-6.816 0.032-0.172 0.29-0.152 0.295 0.025zm-28.836-12.855a7.907 7.907 0 0 1 3.076 10.341c-0.16 0.345-0.676 1.382-1.604 2.64-2.02 2.736-5.27 6.826-5.908 9.283-1.397 5.38 0.323 8.33 2.154 9.901 0.135 0.114-0.012 0.327-0.168 0.243a21.189 21.189 0 0 1-8.523-8.287c-3.8-6.69-3.684-14.709 0.151-21.302 2.195-3.777 7.055-5.03 10.822-2.819zm7.697-7.701c7.694 0.055 14.58 4.164 18.375 10.782 2.172 3.789 0.826 8.625-2.971 10.782a7.906 7.906 0 0 1-10.494-2.507c-0.218-0.312-0.858-1.276-1.484-2.708-1.36-3.118-3.275-7.978-5.086-9.76-3.96-3.897-7.376-3.885-9.65-3.083-0.167 0.06-0.278-0.176-0.128-0.269a21.19 21.19 0 0 1 11.438-3.237z"
+        fill="#ef5db0" fill-rule="nonzero" />
+      <g transform="translate(.153 .314)">
+        <mask id="b" fill="#ffffff">
+          <use width="100%" height="100%" xlink:href="#a" />
+        </mask>
+        <g fill="#ef60a3" fill-rule="nonzero" mask="url(#b)">
+          <path d="m0 0h42.947v42.947h-42.947z" />
+        </g>
+      </g>
+    </g>
+  </svg>
+  <span class="title">{{ name }}</span>
+  <span class="instance">
+    <svg width="15" height="15" fill="#000000" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M 33.2500 51.0273 C 34.0938 51.6133 35.2656 51.3789 35.9219 50.4180 C 40.2344 44.2773 42.7187 36.3789 42.7187 28.0117 C 42.7187 19.6445 40.2109 11.7227 35.9219 5.5820 C 35.2656 4.6211 34.1172 4.3867 33.2500 4.9961 C 32.3360 5.6055 32.2187 6.7773 32.8984 7.7617 C 36.6484 13.3164 38.9922 20.4414 38.9922 28.0117 C 38.9922 35.5820 36.7422 42.8008 32.875 48.2617 C 32.1953 49.2227 32.3360 50.3945 33.2500 51.0273 Z M 23.7813 44.6289 C 24.6953 45.2383 25.8203 45.0039 26.4766 44.0664 C 29.5938 39.7539 31.3750 34.0117 31.3750 28.0117 C 31.3750 21.9883 29.6172 16.2461 26.4766 11.9336 C 25.7969 11.0195 24.6953 10.7851 23.7813 11.3945 C 22.8906 12.0039 22.7500 13.1524 23.4531 14.1602 C 26.0078 17.9102 27.6016 22.8320 27.6016 28.0117 C 27.6016 33.1914 26.0547 38.1602 23.4531 41.8633 C 22.7734 42.8711 22.8906 44.0195 23.7813 44.6289 Z M 14.4297 38.3008 C 15.2500 38.8633 16.375 38.6758 17.0547 37.7617 C 18.8828 35.3008 19.9844 31.6914 19.9844 28.0117 C 19.9844 24.3320 18.8594 20.7461 17.0547 18.2383 C 16.375 17.3242 15.2500 17.1367 14.4297 17.6992 C 13.4219 18.3789 13.2813 19.5742 14.0313 20.6055 C 15.3906 22.4336 16.2109 25.2227 16.2109 28.0117 C 16.2109 30.8008 15.3672 33.5898 14.0313 35.4414 C 13.3047 36.4492 13.4453 37.5976 14.4297 38.3008 Z">
+        </path>
+      </g>
+    </svg>&nbsp;
+    As at: {{ "now" | date: "%s" | plus: trmnl.user.utc_offset | date: "%I:%M %P" }}</span>
+</div>

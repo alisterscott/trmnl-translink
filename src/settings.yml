@@ -1,0 +1,28 @@
+---
+strategy: polling
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: ''
+polling_verb: get
+polling_url: https://jp.translink.com.au/api/stop/timetable/{{ stopid }}
+polling_headers: ''
+polling_body: ''
+id: 233040
+custom_fields:
+- keyname: stopid
+  field_type: string
+  name: Stop ID
+  description: Translink Stop ID
+  placeholder: '003749'
+  help_text: eg. 003749 or central-station
+- keyname: hidenextmins
+  field_type: number
+  placeholder: 15
+  default: 15
+  name: Hide Number of Minutes
+  description: Hide departures for this number of minutes from refresh
+  min: 0
+  max: 60
+  help_text: Min 0, Max 60 mins
+name: Translink
+refresh_interval: 15
