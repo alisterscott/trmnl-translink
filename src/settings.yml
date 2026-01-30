@@ -10,7 +10,7 @@ polling_body: ''
 id: 233040
 custom_fields:
 - keyname: about
-  name: Alister Scott
+  name: Plugin by Alister Scott
   field_type: author_bio
   category: travel,life
   description: Upcoming departures for stops in Queensland via the Translink API
