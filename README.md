@@ -1,5 +1,11 @@
 # trmnl-translink
-A Translink Stop Timetable for a TRMNL Device
+
+A Translink Stop Timetable for a TRMNL eInk Device
+
+Supports various screen layouts. 
+
+![Preview](preview.png)
+
 
 ## Setup
 
@@ -9,4 +15,6 @@ A Translink Stop Timetable for a TRMNL Device
 4. `rbenv init`
 5. `rbenv local`
 6. `bundler install`  
-7. `
+7. `trmnlp login`
+8. `trmnlp serve`
+9. `trmnlp push`

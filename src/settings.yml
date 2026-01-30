@@ -9,10 +9,16 @@ polling_headers: ''
 polling_body: ''
 id: 233040
 custom_fields:
+- keyname: about
+  name: Alister Scott
+  field_type: author_bio
+  category: travel,life
+  description: Upcoming departures for stops in Queensland via the Translink API
+  github_url: https://github.com/alisterscott/trmnl-translink
 - keyname: stopid
   field_type: string
-  name: Stop ID
-  description: Translink Stop ID
+  name: Translink Stop ID
+  description: You can find your closest Stop IDs using the <a class="underline" href="https://jp.translink.com.au/plan-your-journey/stops" target="_blank">Translink Stops & Stations Page</a> by clicking a stop and getting it from the URL.
   placeholder: central-station
   help_text: eg. 003749 or central-station
   default: central-station
