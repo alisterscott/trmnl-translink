@@ -2,6 +2,7 @@
 {% assign hide_mins = trmnl.plugin_settings.custom_fields_values.hidenextmins | default: "15" | plus: 0 %}
 {% assign hide_secs = hide_mins | times: 60 %}
 {% assign cutoff_epoch = now_epoch | plus: hide_secs %}
+{% assign ignore_headsigns = trmnl.plugin_settings.custom_fields_values.ignoreheadsigns | default: "" %}
 <div class="layout flex flex--top">
   <table class="table table--small">
     <thead>
@@ -23,6 +24,15 @@
       {% endif %}
       {% if dep_epoch >= cutoff_epoch %}
       {% unless d.realtime.isCancelled %}
+      {% comment %}Check if headsign should be ignored{% endcomment %}
+      {% assign should_ignore = false %}
+      {% if ignore_headsigns != "" %}
+        {% assign headsign_check = '"' | append: d.headsign | append: '"' %}
+        {% if ignore_headsigns contains headsign_check %}
+          {% assign should_ignore = true %}
+        {% endif %}
+      {% endif %}
+      {% unless should_ignore %}
       <tr>
         <td>
           <span class="label">{{ d.headsign }}</span>
@@ -61,6 +71,7 @@
       </tr>
       {% assign row_count = row_count | plus: 1 %}
       {% endunless %}
+      {% endunless %}
       {% endif %}
       {% endfor %}
       {% else %}
@@ -77,7 +88,12 @@
 </div>
 {% if hide_mins > 0 %}
 <span class="label label--small">
-  *Services departing within the next {{ hide_mins }} minutes are not shown.
+  *Services within next {{ hide_mins }} minutes are hidden.
+</span>
+{% endif %}
+{% if ignore_headsigns != "" %}
+<span class="label label--small">
+  *Services {{ ignore_headsigns | replace: '[', '' | replace: ']', '' | replace: '"', '' }} are hidden.
 </span>
 {% endif %}
 

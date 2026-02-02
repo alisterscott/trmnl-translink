@@ -31,5 +31,13 @@ custom_fields:
   min: 0
   max: 60
   help_text: Min 0, Max 60 mins
+- keyname: ignoreheadsigns
+  field_type: multi_string
+  name: Ignore Headsigns
+  description: Optional list of headsigns to ignore
+  placeholder: Caboolture
+  optional: true
+  help_text: One per line
+
 name: Queensland Stop Timetable (Translink)
 refresh_interval: 15
