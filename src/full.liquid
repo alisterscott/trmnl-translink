@@ -3,7 +3,7 @@
 {% assign hide_secs = hide_mins | times: 60 %}
 {% assign cutoff_epoch = now_epoch | plus: hide_secs %}
 <div class="layout flex flex--top">
-  <table class="table table--small" data-table-limit="true">
+  <table class="table table--small">
     <thead>
       <tr>
         <th><span class="title title--small">Service</span></th>
@@ -13,7 +13,9 @@
     </thead>
     <tbody>
       {% if departures and departures.size > 0 %}
+      {% assign row_count = 0 %}
       {% for d in departures %}
+      {% if row_count >= 12 %}{% break %}{% endif %}
       {% if d.realtime != nil and d.realtime.expectedDepartureUtc %}
       {% assign dep_epoch = d.realtime.expectedDepartureUtc | date: "%s" | plus: 0 %}
       {% else %}
@@ -57,6 +59,7 @@
           </span>
         </td>
       </tr>
+      {% assign row_count = row_count | plus: 1 %}
       {% endunless %}
       {% endif %}
       {% endfor %}
