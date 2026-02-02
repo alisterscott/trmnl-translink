@@ -38,6 +38,5 @@ custom_fields:
   placeholder: Caboolture
   optional: true
   help_text: One per line
-
 name: Queensland Stop Timetable (Translink)
 refresh_interval: 15

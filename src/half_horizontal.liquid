@@ -25,10 +25,14 @@
       {% comment %}Check if headsign should be ignored{% endcomment %}
       {% assign should_ignore = false %}
       {% if ignore_headsigns != "" %}
-        {% assign headsign_check = '"' | append: d.headsign | append: '"' %}
-        {% if ignore_headsigns contains headsign_check %}
-          {% assign should_ignore = true %}
-        {% endif %}
+        {% assign ignore_list = ignore_headsigns | split: "," %}
+        {% for ignore_item in ignore_list %}
+          {% assign trimmed_item = ignore_item | strip %}
+          {% if d.headsign == trimmed_item %}
+            {% assign should_ignore = true %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
       {% endif %}
       {% unless should_ignore %}
       <tr>
@@ -90,7 +94,7 @@
 {% endif %}
 {% if ignore_headsigns != "" %}
 <span class="label label--small">
-  *Services {{ ignore_headsigns | replace: '[', '' | replace: ']', '' | replace: '"', '' }} are hidden.
+  *Services of {{ ignore_headsigns | replace: ",", ", " }} are hidden.
 </span>
 {% endif %}
 

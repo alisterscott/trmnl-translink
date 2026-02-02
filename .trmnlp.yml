@@ -6,11 +6,9 @@ watch:
 
 # values of custom fields (defined in src/settings.yml)
 custom_fields:
-  stopid: "003749"
+  stopid: "central-station"
   hidenextmins: 10
-  ignoreheadsigns:
-    - "110"
-    - "112"
+  ignoreheadsigns: "Caboolture,Redcliffe"
 
 # Time zone IANA identifier to inject into trmnl.user; see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 time_zone: Australia/Brisbane
